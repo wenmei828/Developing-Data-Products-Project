@@ -1,0 +1,57 @@
+Developing Data Products project Presentation
+========================================================
+author: XL
+date: `r date()`
+transition: rotate
+
+Tab Panels
+========================================================
+transition: linear
+
+Tabsets are created by calling the tabsetPanel function with a list of tabs created by the tabPanel function. Each tab panel is provided a list of output elements which are rendered vertically within the tab.
+
+- Plot
+- Summary
+- Table
+
+Slide With Code
+========================================================
+transition: linear
+Here is the  source code for the user-interface:
+```{r,eval=FALSE}
+
+  # Show a tabset that includes a plot, summary, and table view
+  # of the generated distribution
+  mainPanel(
+                tabsetPanel(
+                        tabPanel("Plot", plotOutput("plot")), 
+                        tabPanel("Summary", verbatimTextOutput("summary")), 
+                        tabPanel("Table", tableOutput("table"))
+                )
+        )
+
+```
+
+Tabs and Reactive Data
+========================================================
+transition: linear
+
+Introducing tabs into our user-interface underlines the importance of creating reactive expressions for shared data. In this example each tab provides its own view of the dataset. If the dataset is expensive to compute then our user-interface might be quite slow to render. 
+***
+The server script below demonstrates how to calculate the data once in a reactive expression and have the result be shared by all of the output tabs
+
+Slide With Code
+========================================================
+transition: linear
+Here is the  source code for the server:
+```{r,eval=FALSE}
+data <- reactive({  
+        dist <- switch(input$dist,
+                norm = rnorm,
+                unif = runif,
+                lnorm = rlnorm,
+                exp = rexp)
+                
+        dist(input$n)
+        })
+```
